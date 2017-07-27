@@ -13,11 +13,17 @@ passport.use(
       clientSecret: keys.googleClientSecret,
       callbackURL: "/auth/google/callback"
     },
-    accessToken => {
+    (accessToken, refreshToken, profile, done) => {
       console.log(accessToken);
+      // console.log(refreshToken);
+      // console.log(profile);
     }
   )
 );
+
+app.get("/", function(req, res) {
+  res.send("hi");
+});
 
 app.get(
   "/auth/google",
@@ -25,6 +31,8 @@ app.get(
     scope: ["profile", "email"]
   })
 );
+
+app.get("/auth/google/callback", passport.authenticate("google"));
 
 app.listen(process.env.PORT, process.env.IP, function() {
   console.log("server has started", process.env.IP);
